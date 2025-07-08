@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EntradaSaida.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6f13c7d019641e1ce85cabdef116cfee68f0b3a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f5a8c6e562c225b94385760b8c06a8f68dbd4f11")]
 [assembly: System.Reflection.AssemblyProductAttribute("EntradaSaida.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EntradaSaida.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
