@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  entradasaida:
+    build: .
+    container_name: entradasaida-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./models:/app/models
+      - ./recordings:/app/recordings
+      - ./data:/app/data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/entradasaida.db
+    devices:
+      - /dev/video0:/dev/video0  # Webcam USB
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    name: entradasaida-network
