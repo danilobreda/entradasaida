@@ -1,9 +1,9 @@
-using EntradaSaida.Infrastructure.Data;
 using EntradaSaida.Core.Interfaces;
 using EntradaSaida.Core.Services;
 using EntradaSaida.ML.Processing;
 using EntradaSaida.Api.Hubs;
 using Microsoft.EntityFrameworkCore;
+using EntradaSaida.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +45,7 @@ builder.Services.AddCors(options =>
 });
 
 // Health checks
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<AppDbContext>();
+builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>(); //https://khalidabuhakmeh.com/health-checks-for-aspnet-core-and-entity-framework-core
 
 var app = builder.Build();
 
