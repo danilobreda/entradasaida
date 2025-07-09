@@ -11,12 +11,12 @@ namespace EntradaSaida.ML.Processing
     /// </summary>
     public class FrameProcessor : IDisposable
     {
-        private readonly YoloV8Detector _detector;
+        private readonly YoloML _detector;
         private readonly PersonTracker _tracker;
         private readonly LineCounter _lineCounter;
         private bool _disposed;
     
-        public FrameProcessor(YoloV8Detector detector, PersonTracker tracker, LineCounter lineCounter)
+        public FrameProcessor(YoloML detector, PersonTracker tracker, LineCounter lineCounter)
         {
             _detector = detector;
             _tracker = tracker;

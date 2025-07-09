@@ -12,6 +12,7 @@
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.11.0.5746" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.1" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Extensions" Version="0.14.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
   </ItemGroup>
 
   <ItemGroup>

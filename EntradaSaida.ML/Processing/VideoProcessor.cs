@@ -12,7 +12,7 @@ namespace EntradaSaida.ML.Processing
     /// </summary>
     public class VideoProcessor : IVideoProcessor, IDisposable
     {
-        private readonly YoloV8Detector _detector;
+        private readonly YoloML _detector;
         private readonly PersonTracker _tracker;
         private readonly LineCounter _lineCounter;
         private readonly FrameProcessor _frameProcessor;
@@ -42,7 +42,7 @@ namespace EntradaSaida.ML.Processing
 
         public VideoProcessor()
         {
-            _detector = new YoloV8Detector();
+            _detector = new YoloML();
             _tracker = new PersonTracker();
             _lineCounter = new LineCounter();
             _frameProcessor = new FrameProcessor(_detector, _tracker, _lineCounter);
@@ -85,7 +85,7 @@ namespace EntradaSaida.ML.Processing
             #endregion
 
             #region carregando modelo
-            await _detector.LoadModelAsync("C:\\PROJETOS\\danilobreda\\entradasaida\\models\\yolov8n.onnx");
+            //await _detector.LoadModelAsync("C:\\PROJETOS\\danilobreda\\entradasaida\\models\\yolov8n.onnx");
             #endregion
 
             if (_capture == null || !_capture.IsOpened)
