@@ -12,8 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=entradasaida.db"));
 
 // Registrar serviços
-builder.Services.AddScoped<ICounterService, CounterService>();
-builder.Services.AddScoped<IConfigService, ConfigService>();
+builder.Services.AddSingleton<ICounterService,CounterService>();//builder.Services.AddScoped<ICounterService, CounterService>();
+builder.Services.AddSingleton<IConfigService,ConfigService>();//builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddSingleton<VideoProcessor>();
 
 // Controllers
@@ -38,9 +38,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://127.0.0.1:5500", "http://localhost:5500")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials();
     });
 });
 
@@ -69,7 +70,7 @@ app.MapHub<CounterHub>("/counterhub");
 app.MapHealthChecks("/health");
 
 // Página principal
-app.MapGet("/", () => Results.Redirect("/index.html"));
+app.MapGet("/", () => Results.Redirect("/swagger/"));
 
 // Criar banco de dados se não existir
 using (var scope = app.Services.CreateScope())

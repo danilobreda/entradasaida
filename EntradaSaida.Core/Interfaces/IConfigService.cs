@@ -33,11 +33,6 @@ namespace EntradaSaida.Core.Interfaces
         Task<List<SystemConfig>> GetAllConfigsAsync();
     
         /// <summary>
-        /// Carrega configurações padrão
-        /// </summary>
-        Task LoadDefaultConfigsAsync();
-    
-        /// <summary>
         /// Valida uma configuração
         /// </summary>
         Task<bool> ValidateConfigAsync(string key, object value);

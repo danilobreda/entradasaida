@@ -116,26 +116,6 @@ namespace EntradaSaida.Api.Controllers
         }
     
         /// <summary>
-        /// Carrega configurações padrão
-        /// </summary>
-        [HttpPost("defaults")]
-        public async Task<IActionResult> LoadDefaultConfigsAsync()
-        {
-            try
-            {
-                await _configService.LoadDefaultConfigsAsync();
-                _logger.LogInformation("Configurações padrão carregadas");
-            
-                return Ok(new { message = "Configurações padrão carregadas com sucesso" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao carregar configurações padrão");
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-    
-        /// <summary>
         /// Obtém configurações específicas para a câmera
         /// </summary>
         [HttpGet("camera")]
@@ -184,15 +164,5 @@ namespace EntradaSaida.Api.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
-    }
-
-    /// <summary>
-    /// Request para definir configuração
-    /// </summary>
-    public class SetConfigRequest
-    {
-        public string Key { get; set; } = string.Empty;
-        public object Value { get; set; } = new();
-        public ConfigType Type { get; set; } = ConfigType.String;
     }
 }

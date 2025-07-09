@@ -6,6 +6,9 @@ class EntradaSaidaDashboard {
         this.isConnected = false;
         this.lastUpdate = new Date();
         
+        // URL base para os endpoints da API
+        this.baseUrl = 'http://localhost:52138';
+        
         this.init();
     }
     
@@ -33,7 +36,7 @@ class EntradaSaidaDashboard {
     async setupSignalR() {
         try {
             this.connection = new signalR.HubConnectionBuilder()
-                .withUrl("/counterhub")
+                .withUrl(`${this.baseUrl}/counterhub`)
                 .withAutomaticReconnect()
                 .build();
             
@@ -165,7 +168,7 @@ class EntradaSaidaDashboard {
     async loadInitialData() {
         try {
             // Carregar estatísticas de hoje
-            const response = await fetch('/api/counter/summary');
+            const response = await fetch(`${this.baseUrl}/api/counter/summary`);
             const data = await response.json();
             
             if (data.today) {
@@ -187,7 +190,7 @@ class EntradaSaidaDashboard {
     
     async startCamera() {
         try {
-            const response = await fetch('/api/camera/start', {
+            const response = await fetch(`${this.baseUrl}/api/camera/start`, {
                 method: 'POST'
             });
             
@@ -207,7 +210,7 @@ class EntradaSaidaDashboard {
     
     async stopCamera() {
         try {
-            const response = await fetch('/api/camera/stop', {
+            const response = await fetch(`${this.baseUrl}/api/camera/stop`, {
                 method: 'POST'
             });
             
@@ -231,7 +234,7 @@ class EntradaSaidaDashboard {
         }
         
         try {
-            const response = await fetch('/api/counter/reset', {
+            const response = await fetch(`${this.baseUrl}/api/counter/reset`, {
                 method: 'POST'
             });
             
@@ -251,7 +254,7 @@ class EntradaSaidaDashboard {
     
     async refreshVideoFeed() {
         try {
-            const response = await fetch('/api/camera/frame');
+            const response = await fetch(`${this.baseUrl}/api/camera/frame`);
             
             if (response.ok) {
                 const blob = await response.blob();
