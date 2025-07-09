@@ -21,12 +21,7 @@ namespace EntradaSaida.Core.Interfaces
         /// Verifica se o processamento está ativo
         /// </summary>
         bool IsRunning { get; }
-    
-        /// <summary>
-        /// Configura a fonte de vídeo
-        /// </summary>
-        Task<bool> SetVideoSourceAsync(string source);
-    
+        
         /// <summary>
         /// Obtém o frame atual
         /// </summary>

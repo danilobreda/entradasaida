@@ -38,6 +38,10 @@ namespace EntradaSaida.ML.Processing
             
                 // 1. Detectar pessoas no frame
                 var detections = await _detector.DetectPersonsAsync(frameData);
+                if(detections.Count > 0)
+                {
+                    Console.WriteLine("teste");
+                }
                 result.DetectionCount = detections.Count;
             
                 // 2. Converter detecções para o formato do tracker

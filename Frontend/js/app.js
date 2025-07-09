@@ -264,7 +264,7 @@ class EntradaSaidaDashboard {
                 videoFeed.src = url;
                 
                 // Limpar URL anterior
-                setTimeout(() => URL.revokeObjectURL(url), 5000);
+                setTimeout(() => URL.revokeObjectURL(url), 500);
                 
                 // Esconder overlay
                 document.getElementById('videoStatus').style.display = 'none';
@@ -467,7 +467,7 @@ class EntradaSaidaDashboard {
             if (this.isConnected) {
                 await this.refreshVideoFeed();
             }
-        }, 5000);
+        }, 500);
     }
 }
 

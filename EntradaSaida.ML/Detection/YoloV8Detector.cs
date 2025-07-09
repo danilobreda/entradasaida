@@ -62,12 +62,12 @@ namespace EntradaSaida.ML.Detection
                 using var mat = new Mat();
                 CvInvoke.Imdecode(imageData, ImreadModes.AnyColor, mat);
             
-                var preprocessed = PreprocessImage(mat);
-            
-                // Executar inferência
+                var preprocessed = PreprocessImage(mat); //converter BGR→RGB, normalizar para NCHW
+
+                // Executar o modelo ONNX
                 var outputs = await _modelLoader.RunInferenceAsync(preprocessed.inputData, 1, 3, ModelInputSize, ModelInputSize);
-            
-                // Pós-processar resultados
+
+                // Pós-processar resultados // Converter coordenadas, aplicar NMS, filtrar classes
                 var detectionResults = PostprocessOutputs(outputs, confidenceThreshold, preprocessed.scaleX, preprocessed.scaleY);
             
                 // Filtrar apenas pessoas e converter para o formato do domínio
@@ -130,21 +130,26 @@ namespace EntradaSaida.ML.Detection
         
             // Normalizar para [0,1] e converter para formato NCHW
             var inputData = new float[3 * ModelInputSize * ModelInputSize];
-            var rgbBytes = rgb.GetData();
-        
+            
+            // SOLUÇÃO: Converter Mat para Image<> para acessar dados corretamente
+            using var image3Channel = rgb.ToImage<Bgr, byte>();
+            var data = image3Channel.Data;
+
             for (int c = 0; c < 3; c++)
             {
                 for (int h = 0; h < ModelInputSize; h++)
                 {
                     for (int w = 0; w < ModelInputSize; w++)
                     {
-                        var pixelIndex = (h * ModelInputSize + w) * 3 + c;
                         var outputIndex = c * ModelInputSize * ModelInputSize + h * ModelInputSize + w;
-                        inputData[outputIndex] = Array.IndexOf(rgbBytes,pixelIndex) / 255.0f;
+                        // Acessar dados corrretamente: [altura, largura, canal]
+                        // Note: BGR -> RGB, então c=0(B->R), c=1(G->G), c=2(R->B)
+                        var channelIndex = 2 - c; // Inverter BGR para RGB
+                        inputData[outputIndex] = data[h, w, channelIndex] / 255.0f;
                     }
                 }
             }
-        
+
             return (inputData, scaleX, scaleY);
         }
     

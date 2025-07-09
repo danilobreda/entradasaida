@@ -32,8 +32,13 @@ namespace EntradaSaida.ML.Processing
         private int _totalDetections;
         private readonly List<double> _processingTimes = new();
         private byte[]? _currentFrame;
+        private byte[]? _currentFrameProcessed;
 
-        public bool IsRunning => _processingTask?.Status == TaskStatus.Running;
+        public bool IsRunning =>
+            _processingTask != null &&
+            (_processingTask.Status == TaskStatus.Running ||
+             _processingTask.Status == TaskStatus.WaitingToRun ||
+             _processingTask.Status == TaskStatus.WaitingForActivation);
 
         public VideoProcessor()
         {
@@ -43,13 +48,17 @@ namespace EntradaSaida.ML.Processing
             _frameProcessor = new FrameProcessor(_detector, _tracker, _lineCounter);
         }
 
-        public async Task<bool> SetVideoSourceAsync(string source)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
+            if (IsRunning)
+                return;
+
+            #region carregando webcam
             try
             {
                 _capture?.Dispose();
 
-                // Tentar parsear como número (webcam)
+                var source = "0";//webcam 0 para teste
                 if (int.TryParse(source, out var cameraIndex))
                 {
                     _capture = new VideoCapture(cameraIndex);
@@ -67,23 +76,17 @@ namespace EntradaSaida.ML.Processing
                     _capture.Set(CapProp.FrameWidth, 640);
                     _capture.Set(CapProp.FrameHeight, 480);
                     _capture.Set(CapProp.Fps, 30);
-
-                    return await Task.FromResult(true);
                 }
-
-                return await Task.FromResult(false);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao configurar fonte de vídeo: {ex.Message}");
-                return await Task.FromResult(false);
             }
-        }
+            #endregion
 
-        public async Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            if (IsRunning)
-                return;
+            #region carregando modelo
+            await _detector.LoadModelAsync("C:\\PROJETOS\\danilobreda\\entradasaida\\models\\yolov8n.onnx");
+            #endregion
 
             if (_capture == null || !_capture.IsOpened)
                 throw new InvalidOperationException("Fonte de vídeo não configurada");
@@ -124,7 +127,11 @@ namespace EntradaSaida.ML.Processing
 
         public async Task<byte[]?> GetCurrentFrameAsync()
         {
-            return await Task.FromResult(_currentFrame);
+            //AnnotatedFrame.
+            if (_currentFrameProcessed == null)
+                return await Task.FromResult(_currentFrame);
+            else
+                return await Task.FromResult(_currentFrameProcessed);
         }
 
         public async Task<VideoProcessingStats> GetProcessingStatsAsync()
@@ -211,6 +218,8 @@ namespace EntradaSaida.ML.Processing
                                 Timestamp = result.Timestamp
                             });
                         }
+
+                        _currentFrameProcessed = result.AnnotatedFrame;
                     }
 
                     // Controle de FPS (30 FPS = ~33ms por frame)
@@ -248,14 +257,6 @@ namespace EntradaSaida.ML.Processing
         public bool RemoveCountingLine(int lineId)
         {
             return _lineCounter.RemoveLine(lineId);
-        }
-
-        /// <summary>
-        /// Carrega modelo YOLO
-        /// </summary>
-        public async Task<bool> LoadModelAsync(string modelPath)
-        {
-            return await _detector.LoadModelAsync(modelPath);
         }
 
         public void Dispose()

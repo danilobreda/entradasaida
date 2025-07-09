@@ -6,37 +6,31 @@ namespace EntradaSaida.Core.Models
     public class SystemConfig
     {
         public int Id { get; set; }
-        public string Key { get; set; } = string.Empty;
-        public string Value { get; set; } = string.Empty;
-        public ConfigType Type { get; set; }
+        public string CameraUrl { get; set; }
+        public string ModelPath { get; set; }
+        public float ConfidenceThreshold { get; set; }
+        public float MaxTrackingDistance { get; set; }
+        public int TrackingTimeout { get; set; }
+        public int VideoWidth { get; set; }
+        public int VideoHeight { get; set; }
+        public int FrameRate { get; set; }
+        public bool EnableRecording { get; set; }
+        public string RecordingPath { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-    
-        // Configurações padrão
-        public static class Keys
-        {
-            public const string CameraUrl = "camera_url";
-            public const string ModelPath = "model_path";
-            public const string ConfidenceThreshold = "confidence_threshold";
-            public const string MaxTrackingDistance = "max_tracking_distance";
-            public const string TrackingTimeout = "tracking_timeout";
-            public const string VideoWidth = "video_width";
-            public const string VideoHeight = "video_height";
-            public const string FrameRate = "frame_rate";
-            public const string EnableRecording = "enable_recording";
-            public const string RecordingPath = "recording_path";
-        }
-    }
 
-    /// <summary>
-    /// Tipo de configuração
-    /// </summary>
-    public enum ConfigType
-    {
-        String,
-        Integer,
-        Float,
-        Boolean,
-        Json
+        public SystemConfig()
+        {
+            CameraUrl = string.Empty;
+            ModelPath = "C:\\PROJETOS\\danilobreda\\entradasaida\\models\\yolov8n.onnx";
+            ConfidenceThreshold = 0.5f;
+            MaxTrackingDistance = 50.0f;
+            TrackingTimeout = 30;
+            VideoWidth = 640;
+            VideoHeight = 480;
+            FrameRate = 30;
+            EnableRecording = false;
+            RecordingPath = "recordings/";
+        }
     }
 }

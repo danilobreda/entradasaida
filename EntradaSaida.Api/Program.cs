@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Registrar serviços
 builder.Services.AddSingleton<ICounterService,CounterService>();//builder.Services.AddScoped<ICounterService, CounterService>();
-builder.Services.AddSingleton<IConfigService,ConfigService>();//builder.Services.AddScoped<IConfigService, ConfigService>();
+//builder.Services.AddSingleton<IConfigService,ConfigService>();//builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddSingleton<VideoProcessor>();
 
 // Controllers
